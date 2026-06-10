@@ -21,14 +21,16 @@
 (defpackage :cl-cron
   (:nicknames :cron)
   (:use :cl)
-  (:export  :make-cron-job
-	    :delete-cron-job
-	    :start-cron
-	    :stop-cron
-	    :restart-cron
-	    :gen-list
-	    :min-list
-	    :max-list
-	    :log-cron-message
-	    :*cron-log-file*
-	    :*cron-load-file*))
+  (:export  #:make-cron-job
+            #:delete-cron-job
+            #:start-cron
+            #:stop-cron
+            #:restart-cron
+            #:gen-list
+            #:min-list
+            #:max-list
+            #:log-cron-message
+            #:*cron-log-file*
+            #:*cron-load-file*
+            #:cron-jobs-pretty-print
+            #:cron-jobs-get))
