@@ -37,19 +37,9 @@
             :documentation "Run the job only when start-cron is called.")
    (function-symbol :accessor job-func :initarg :job-func)))
 
-(defmethod print-object ((obj cron-job) stream)
-  (print-unreadable-object (obj stream :type t)
-    (with-accessors ((min job-minute)
-                     (hour job-hour)
-                     (dom job-dom)
-                     (month job-month)
-                     (dow job-dow)
-                     (@boot job-@boot)
-                     (func job-func))
-        obj
-      (format stream "Minute: ~a~%Hour: ~a~%Day of month: ~a~%Month: ~a\
-Day of Week: ~a~%At-boot: ~a~%Function: ~a"
-              min hour dom month dow @boot func))))
+;; default method:
+;; (defmethod print-object ((obj cron-job) stream)
+;;   (print-unreadable-object (obj stream :type t :identity t)))
 
 (defvar *cron-jobs-hash* (make-hash-table :test #'equal)
   "Hash-table of all cron-job objects that need to be run.")
@@ -59,13 +49,26 @@ Day of Week: ~a~%At-boot: ~a~%Function: ~a"
   *cron-jobs-hash*)
 
 (defun cron-jobs-pretty-print (&optional (stream *standard-output*))
-  "Print the current cron jobs JOBS to STREAM."
-  (let ((*print-circle* t)
-        (*print-readably* t))
-    (maphash (lambda (k v)
-               (format stream "~%Job: ~a~%~a"
-                       (symbol-name k) v))
-             *cron-jobs-hash*)))
+  "Print the current cron jobs to STREAM."
+  (let ((*print-circle* t))
+    (maphash
+     (lambda (k v)
+       (format stream "~%Job ~a:~%" (symbol-name k))
+       (print-unreadable-object (v stream :type t)
+         (with-accessors ((min job-minute)
+                          (hour job-hour)
+                          (dom job-dom)
+                          (month job-month)
+                          (dow job-dow)
+                          (@boot job-@boot)
+                          (func job-func))
+             v
+           (format stream
+                   "Minute: ~a~%Hour: ~a~%Day of month: ~a\
+Month: ~a~%Day of Week: ~a~%At-boot: ~a~%Function: ~a"
+                   min hour dom month dow @boot func)))
+       (format stream "~%"))
+     *cron-jobs-hash*)))
 
 (defvar *cron-dispatcher-thread* nil
   "The cron-dispatcher thread")
