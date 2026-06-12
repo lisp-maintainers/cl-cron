@@ -55,18 +55,16 @@
      (lambda (k v)
        (format stream "~%Job ~a:~%" k)
        (print-unreadable-object (v stream :type t)
-         (with-accessors ((min job-minute)
-                          (hour job-hour)
-                          (dom job-dom)
-                          (month job-month)
-                          (dow job-dow)
-                          (@boot job-@boot)
-                          (func job-func))
-             v
-           (format stream
-                   "Minute: ~a~%Hour: ~a~%Day of month: ~a\
+         (format stream
+                 "Minute: ~a~%Hour: ~a~%Day of month: ~a\
 Month: ~a~%Day of Week: ~a~%At-boot: ~a~%Function: ~a"
-                   min hour dom month dow @boot func)))
+                 (job-minute v)
+                 (job-hour v)
+                 (job-dom v)
+                 (job-month v)
+                 (job-dow v)
+                 (job-@boot v)
+                 (job-func v)))
        (format stream "~%"))
      *cron-jobs-hash*)))
 
