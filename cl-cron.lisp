@@ -44,11 +44,11 @@
 (defvar *cron-jobs-hash* (make-hash-table :test #'equal)
   "Hash-table of all cron-job objects that need to be run.")
 
-(defun cron-jobs-get ()
+(defun get-jobs ()
   "Return the hash table of the current jobs."
   *cron-jobs-hash*)
 
-(defun cron-jobs-pretty-print (&optional (stream *standard-output*))
+(defun print-jobs (&optional (stream *standard-output*))
   "Print the current cron jobs to STREAM."
   (let ((*print-circle* t))
     (maphash

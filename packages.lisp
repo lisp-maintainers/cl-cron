@@ -32,5 +32,5 @@
             #:log-cron-message
             #:*cron-log-file*
             #:*cron-load-file*
-            #:cron-jobs-pretty-print
-            #:cron-jobs-get))
+            #:print-jobs
+            #:get-jobs))
