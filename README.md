@@ -96,6 +96,7 @@ https://40ants.com/lisp-project-of-the-day/2020/06/0087-cl-cron.html
 
 ## Changelog
 
+- 2026-06-12: the jobs hash-table is now `equalp` (names can be a string or anything else).
 - 2020-10-13: we added a name to the cl-cron thread.
 
 Licence: GPL

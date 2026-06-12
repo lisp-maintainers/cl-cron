@@ -38,20 +38,20 @@
    (function-symbol :accessor job-func :initarg :job-func)))
 
 
-(defvar *cron-jobs-hash* (make-hash-table)
-  "contains a hash of all cron-job objects that need to be run")
+(defvar *cron-jobs-hash* (make-hash-table :test #'equal)
+  "Hash-table of all cron-job objects that need to be run.")
 
 (defvar *cron-dispatcher-thread* nil
-  "a parameter to that holds the cron-dispatcher thread")
+  "The cron-dispatcher thread")
 
 (defvar *cron-dispatcher-processing* (bordeaux-threads:make-lock)
   "allows us to not kill the thread unless the lock can be acquired")
 
 (defparameter *cron-load-file* nil
-  "a parameter which points to a lisp or fasl file which would be loaded once start-cron is called. The boot file should be made of as many make-cron-job calls as you like one after the other in normal s-expression fashion.")
+  "A lisp or fasl file which would be loaded once start-cron is called. The boot file should be made of as many make-cron-job calls as you like one after the other in normal s-expression fashion.")
 
 (defparameter *cron-log-file* "./cl-cron.log"
-  "a parameter to set the cron file log location.")
+  "Location of the cron file log (string).")
 
 (defun make-cron-job (function-symbol &key (minute :every) (step-min 1)
                                         (hour :every) (step-hour 1)
@@ -60,7 +60,7 @@
                                         (month :every) (step-month 1)
                                         (boot-only nil)
                                         (hash-key nil))
-  "Create a new instance of a cron-job object and append it to the cron-jobs-list after processing its time.
+  "Create a new instance of a cron-job object and add it to the cron-jobs-list after processing its time.
 
   Key parameters:
   - hash-key (optional): give a name to the job.
