@@ -29,7 +29,34 @@ Stop all jobs with `stop-cron`.
 ## API
 
 ```lisp
-(make-cron-job function-symbol &key (minute :every) (step-min 1) (hour :every) (step-hour 1) (day-of-month :every)
+(make-cron-job function-symbol &key (minute :every) (step-min 1)
+                                    (hour :every) (step-hour 1)
+                                    (day-of-week :every) (step-dow 1)
+                                    (day-of-month :every) (step-dom 1)
+                                    (month :every) (step-month 1)
+                                    (boot-only nil)
+                                    (hash-key nil))
+
+Create a new instance of a cron-job object and append it to the cron-jobs-list after
+processing its time.
+
+Key parameters:
+- hash-key (optional): give a name to the job.
+- minute, step-min
+- hour, step-hour
+- day-of-week, step-dom
+- month, step-month
+- day-of-month, step-dom
+- boot-only: run the job only when START-CRON is called.
+
+Please note that as by ANSI Common Lisp:
+- for the month variable the possible values are between 1 and 12 inclusive with January=1 and
+- for the day of week the possible values are between 0 and 6 with Monday=0.
+
+If you wish to use multiple values for each parameter you need to provide a list of numbers or use the gen-list function. You can not have a list of symbols when it comes to month or day-of-week.
+
+Return: the job hash-key (name).
+
 
 (delete-cron-job cron-key)
 

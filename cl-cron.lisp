@@ -33,7 +33,8 @@
    (day-of-month :accessor job-dom :initarg :job-dom :initform :every)
    (month :accessor job-month :initarg :job-month :initform :every)
    (day-of-week :accessor job-dow :initarg :job-dow :initform :every)
-   (at-boot :accessor job-@boot :initarg :job-@boot :initform nil)
+   (at-boot :accessor job-@boot :initarg :job-@boot :initform nil
+            :documentation "Run the job only when start-cron is called.")
    (function-symbol :accessor job-func :initarg :job-func)))
 
 
@@ -52,13 +53,35 @@
 (defparameter *cron-log-file* "./cl-cron.log"
   "a parameter to set the cron file log location.")
 
-(defun make-cron-job (function-symbol &key (minute :every) (step-min 1) (hour :every) (step-hour 1) (day-of-month :every) 
-		      (step-dom 1) (month :every) (step-month 1) (day-of-week :every) (step-dow 1) (boot-only nil) (hash-key nil))
-  "creates a new instance of a cron-job object and appends it to the cron-jobs-list after processing its time. Note that if you wish to use multiple values for each parameter you need to provide a list of numbers or use the gen-list function. You can not have a list of symbols when it comes to month or day-of-week. Please note that as by ANSI Common Lisp for the month variable the possible values are between 1 and 12 inclusive with January=1 and for day of week the possible values are between 0 and 6 with Monday=0. Returns the hash-key"
+(defun make-cron-job (function-symbol &key (minute :every) (step-min 1)
+                                        (hour :every) (step-hour 1)
+                                        (day-of-week :every) (step-dow 1)
+                                        (day-of-month :every) (step-dom 1)
+                                        (month :every) (step-month 1)
+                                        (boot-only nil)
+                                        (hash-key nil))
+  "Create a new instance of a cron-job object and append it to the cron-jobs-list after processing its time.
+
+  Key parameters:
+  - hash-key (optional): give a name to the job.
+  - minute, step-min
+  - hour, step-hour
+  - day-of-week, step-dom
+  - month, step-month
+  - day-of-month, step-dom
+  - boot-only: run the job only when START-CRON is called.
+
+ Please note that as by ANSI Common Lisp:
+ - for the month variable the possible values are between 1 and 12 inclusive with January=1 and
+ - for the day of week the possible values are between 0 and 6 with Monday=0.
+
+  If you wish to use multiple values for each parameter you need to provide a list of numbers or use the gen-list function. You can not have a list of symbols when it comes to month or day-of-week.
+
+ Return: the job hash-key (name)."
   (unless hash-key
     (setf hash-key (gensym "CRON")))
   (setf (gethash hash-key *cron-jobs-hash*)
-	(make-instance 'cron-job 
+	(make-instance 'cron-job
 		       :job-minute (get-minutes minute step-min)
 		       :job-hour (get-hours hour step-hour)
 		       :job-dom (get-days-of-month day-of-month step-dom)
