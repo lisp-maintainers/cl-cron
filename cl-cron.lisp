@@ -53,7 +53,7 @@
   (let ((*print-circle* t))
     (maphash
      (lambda (k v)
-       (format stream "~%Job ~a:~%" (symbol-name k))
+       (format stream "~%Job ~a:~%" k)
        (print-unreadable-object (v stream :type t)
          (with-accessors ((min job-minute)
                           (hour job-hour)
