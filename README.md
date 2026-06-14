@@ -26,7 +26,7 @@ Wait a minute to see output.
 
 Stop all jobs with `stop-cron`.
 
-To get the current jobs hash table: `(get-jobs)`.
+To get the current jobs hash table: `(jobs)`.
 
 To pretty print current jobs: `(print-jobs)`.
 
@@ -72,7 +72,7 @@ restart-cron
 
 stop-cron
 
-get-jobs
+jobs
 
 print-jobs
 ```
@@ -104,8 +104,8 @@ https://40ants.com/lisp-project-of-the-day/2020/06/0087-cl-cron.html
 
 ## Changelog
 
-- 2026-06-13: add `(get-jobs)` and `(print-jobs)`.
-- 2026-06-12: the jobs hash-table is now `equalp` (names can be a string or anything else).
+- 2026-06-13: added `(jobs)` and `(print-jobs)`.
+- 2026-06-12: the jobs hash-table is now `equal` (names can be a string or anything else).
 - 2020-10-13: we added a name to the cl-cron thread.
 
 Licence: GPL

@@ -33,4 +33,4 @@
             #:*cron-log-file*
             #:*cron-load-file*
             #:print-jobs
-            #:get-jobs))
+            #:jobs))
