@@ -37,9 +37,36 @@
             :documentation "Run the job only when start-cron is called.")
    (function-symbol :accessor job-func :initarg :job-func)))
 
+;; default method:
+;; (defmethod print-object ((obj cron-job) stream)
+;;   (print-unreadable-object (obj stream :type t :identity t)))
 
 (defvar *cron-jobs-hash* (make-hash-table :test #'equal)
   "Hash-table of all cron-job objects that need to be run.")
+
+(defun get-jobs ()
+  "Return the hash table of the current jobs."
+  *cron-jobs-hash*)
+
+(defun print-jobs (&optional (stream *standard-output*))
+  "Print the current cron jobs to STREAM."
+  (let ((*print-circle* t))
+    (maphash
+     (lambda (k v)
+       (format stream "~%Job ~a:~%" k)
+       (print-unreadable-object (v stream :type t)
+         (format stream
+                 "Minute: ~a~%Hour: ~a~%Day of month: ~a\
+Month: ~a~%Day of Week: ~a~%At-boot: ~a~%Function: ~a"
+                 (job-minute v)
+                 (job-hour v)
+                 (job-dom v)
+                 (job-month v)
+                 (job-dow v)
+                 (job-@boot v)
+                 (job-func v)))
+       (format stream "~%"))
+     *cron-jobs-hash*)))
 
 (defvar *cron-dispatcher-thread* nil
   "The cron-dispatcher thread")
